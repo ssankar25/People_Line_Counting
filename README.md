@@ -5,8 +5,11 @@ A convolutional neural network (CNN) that has had its kernel size and layer coun
 The network classifies whether an image contains a head or not.
 
 CNN.py - Contains the convolutional neural network
+
 CustomDataset.py - Links the segmented image dataset with the corresponding annotations given in the CSV file
+
 train.py - Contains training loop used to set kernel weights for the CNN
+
 mainTvHeads.py - Image segmentation algorithm that denoises the image, locates head centers using connected component labeling, and segments the image into 100x100 blocks
 
 ## Convolutional Neural Network
@@ -23,7 +26,10 @@ First, download the provided image dataset "segments", which contains the segmen
 
 Next, run the train.py file, which loops over the dataset and performs classifications on the head images using the network defined in CNN.py and the dataset object defined in the CustomDataset class. The loss is calculated with the CrossEntropyLoss cost function, and this loss is attempted to be minimized in each consecutive epoch using the Adam backpropagation function. A sample training output is seen below.
 
-INSERT IMAGE HERE
+
+Sample Train
+:-----------:
+![](https://i.gyazo.com/5e771dbc4668b6b05d9d93339213a3e0.png)
 
 ## People Counting Algorithm
 ### Methodology
@@ -32,9 +38,15 @@ Using a video captured by the ToF sensor, the algorithm in line_counting.py atte
 The frames of the video, in a while loop, are first processed by applying multiple denoising techniques, including Gaussian Blur, Max Pooling, and Morphological operations like erosion and dilation. This is done to increase the accuracy of the detected centroids. Then, the head count is updated in each frame using the tracking methodology previously described. The lines, centroids, and head count are then drawn to the video for better visualization.
 
 ### Usage
-Download the test_video.avi file, which was captured by the ToF sensor, and run the line_counting.py file in a virtual enviornment with OpenCV installed. This should result in an output that contains the original video with lines drawn on the image, along with the detected head centers and head counts. A sample of this is seen below.
+Download the test_video.avi file, which was captured by the ToF sensor, and run the line_counting.py file in a virtual enviornment with OpenCV installed. This should result in an output that contains the original video with lines drawn on the image, along with the detected head centers and head counts. A sample of this output is seen below.
 
-INSERT GIF HERE
+
+
+Sample People Counting
+:-----------:
+![](https://s5.ezgif.com/tmp/ezgif-5-f14d44d9dd.gif)
 
 ### Current Difficulties
 The current line counting algorithm, though having correct logic for updating the head count and finding the centroids, has difficulties in keeping the centroids stable and only detecting those centroids that are heads. To rectify this, I introduced further denoising techniques, such as erosion and dilation, and experimented with different kernel sizes and iterations to best optimize the center tracking. Though this did reduce noise, there are still some anomalous centroids that tamper with the line counting techniques, resulting in an incorrect head count. 
+
+This incorrect head count compounds as the video progresses since the head count in each frame relies on an accurate head count in the previous frame to make the correct prediction.
