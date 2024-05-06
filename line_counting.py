@@ -159,14 +159,11 @@ def update_tracking(centroids, tracks, line_entry_y, line_exit_y, head_count):
             prev_y = track['pos'][-1][1]
 
 
-            print("Append : ", x, y)
             track['pos'].append((x, y))
 
-            print("Here = ", cid, prev_y, line_entry_y, y,  line_entry_y)
             if prev_y >= line_entry_y and y < line_entry_y:
                 track['crossed_entry_up'] = True
             
-            print("Here1 = ", cid, prev_y, line_exit_y, y,  line_exit_y)
             if track['crossed_entry_up'] and prev_y >= line_exit_y and y < line_exit_y:
                 head_count -= 1
                 track['crossed_entry_up'] = False
@@ -175,7 +172,6 @@ def update_tracking(centroids, tracks, line_entry_y, line_exit_y, head_count):
                 track['crossed_exit_down'] = True
 
             if track['crossed_exit_down'] and prev_y <= line_entry_y and y > line_entry_y:
-                print("just checking = ", prev_y, line_entry_y, y,  line_entry_y)
                 head_count += 1
                 track['crossed_exit_down'] = False
                 
@@ -185,7 +181,6 @@ def update_tracking(centroids, tracks, line_entry_y, line_exit_y, head_count):
 
         else:     
 
-                print("Storng ", x, y)
                 tracks[cid] = {
                     'pos': [(x, y)],
                     'crossed_entry_up': False,
