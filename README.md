@@ -8,6 +8,8 @@ CNN.py - Contains the convolutional neural network
 
 CustomDataset.py - Links the segmented image dataset with the corresponding annotations given in the CSV file
 
+labels.py - Used to generate CSV file for segmented image dataset
+
 train.py - Contains training loop used to set kernel weights for the CNN
 
 mainTvHeads.py - Image segmentation algorithm that denoises the image, locates head centers using connected component labeling, and segments the image into 100x100 blocks
