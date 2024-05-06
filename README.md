@@ -14,6 +14,8 @@ train.py - Contains training loop used to set kernel weights for the CNN
 
 mainTvHeads.py - Image segmentation algorithm that denoises the image, locates head centers using connected component labeling, and segments the image into 100x100 blocks
 
+line_counting.py - Algorithm that counts number of people entering a room
+
 ## Convolutional Neural Network
 ### Methodology
 The CNN.py file contains the network architecture implemented with Pytorch. Each convolutional layer contains the convolution operation done with a specific kernel size, along with a max pooling layer to reduce the feature map size for the next convolutional layer and decrease computational cost. The initial convolutional layers are designed to learn the more elementary features of the head images, such as edges or textures, while the deeper layers learn larger patterns, such as the overall head shapes and bodies that are in complex positions within the images. 
