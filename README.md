@@ -51,6 +51,6 @@ Sample People Counting
 ![](https://s5.ezgif.com/tmp/ezgif-5-f14d44d9dd.gif)
 
 ### Current Difficulties
-The current line counting algorithm, though having correct logic for updating the head count and finding the centroids, has difficulties in keeping the centroids stable and only detecting those centroids that are heads. To rectify this, I introduced further denoising techniques, such as erosion and dilation, and experimented with different kernel sizes and iterations to best optimize the center tracking. Though this did reduce noise, there are still some anomalous centroids that tamper with the line counting techniques, resulting in an incorrect head count. 
+The current line counting algorithm, though having correct logic for updating the head count and finding the centroids, has difficulties in keeping the centroids stable and only detecting those centroids that are heads. To rectify this, I introduced further denoising techniques, such as erosion and dilation, and experimented with different kernel sizes and iterations to best optimize the center tracking. Though this did reduce noise, there are still some anomalous centroids that tamper with the line counting techniques, resulting in an incorrect head count, particularly when the heads are exiting.
 
 This incorrect head count compounds as the video progresses since the head count in each frame relies on an accurate head count in the previous frame to make the correct prediction.
