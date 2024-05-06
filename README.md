@@ -18,6 +18,8 @@ line_counting.py - Algorithm that counts number of people entering a room
 
 tracking.py - Used for applying further denoising to the test video, such as contour area filtering
 
+Dataset link - https://drive.google.com/drive/folders/1_IZBPh19f8zDel46fh1AYXEknjyLmxcc?usp=sharing 
+
 Dataset contains:
 
 segments - Segmented images for CNN training, along with annotations in CSV file
