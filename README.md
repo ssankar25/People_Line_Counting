@@ -16,6 +16,16 @@ mainTvHeads.py - Image segmentation algorithm that denoises the image, locates h
 
 line_counting.py - Algorithm that counts number of people entering a room
 
+tracking.py - Used for applying further denoising to the test video, such as contour area filtering
+
+Dataset contains:
+
+segments - Segmented images for CNN training, along with annotations in CSV file
+
+test_video.avi - Original test video used in line counting after being run through tracking.py
+
+output_video.avi - Output from tracking.py that is used in line counting
+
 ## Convolutional Neural Network
 ### Methodology
 The CNN.py file contains the network architecture implemented with Pytorch. Each convolutional layer contains the convolution operation done with a specific kernel size, along with a max pooling layer to reduce the feature map size for the next convolutional layer and decrease computational cost. The initial convolutional layers are designed to learn the more elementary features of the head images, such as edges or textures, while the deeper layers learn larger patterns, such as the overall head shapes and bodies that are in complex positions within the images. 
@@ -39,10 +49,10 @@ Sample Train
 ### Methodology
 Using a video captured by the ToF sensor, the algorithm in line_counting.py attempts to count the number of people entering a room on the provided video. The room is seen on the top left of the video. As a result, the algorithm is defined such that when a head center crosses the bottom line and then the top, the head count increments since a person enters the room. If a head crosses the top and then the bottom line, then the head count decrements. 
 
-The frames of the video, in a while loop, are first processed by applying multiple denoising techniques, including Gaussian Blur, Max Pooling, and Morphological operations like erosion and dilation. This is done to increase the accuracy of the detected centroids. Then, the head count is updated in each frame using the tracking methodology previously described. The lines, centroids, and head count are then drawn to the video for better visualization.
+The frames of the video, in a while loop, are first processed by applying multiple denoising techniques, including Gaussian Blur, Max Pooling, and Morphological operations like erosion and dilation. Further denoising techniques, such as filtering out smaller contour areas, is done in tracking.py. This is done to increase the accuracy of the detected centroids. Then, the head count is updated in each frame using the tracking methodology previously described. The lines, centroids, and head count are then drawn to the video for better visualization.
 
 ### Usage
-Download the test_video.avi file, which was captured by the ToF sensor, and run the line_counting.py file in a virtual enviornment with OpenCV installed. This should result in an output that contains the original video with lines drawn on the image, along with the detected head centers and head counts. A sample of this output is seen below.
+Download the test_video.avi file, which was captured by the ToF sensor, and run the tracking.py code with this video file. Once the video file completely processes, the output_video file is fed into the line_counting.py file. Run the line_counting.py file in a virtual enviornment with OpenCV installed. This should result in an output that contains the original video with lines drawn on the image, along with the detected head centers and head counts. A sample of this output is seen below.
 
 
 
