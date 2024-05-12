@@ -1,20 +1,38 @@
 import torch
 import torch.nn as nn
-import torch.optim as optim
 import torch.nn.functional as F
-from torchvision import transforms
-from torchvision.datasets import ImageFolder
-from torch.utils.data import DataLoader, random_split, Dataset
-from torchvision import transforms
-import pandas as pd
-import os
-from PIL import Image
 
 # Set whether to use GPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class CNNnet(torch.nn.Module):
+    """
+    This class implements a convolutional neural network (CNN) with a series of convolutional and pooling layers 
+    followed by dropout and fully connected layers. Designed for binary classification tasks, the network processes 
+    single-channel images (e.g., grayscale) and provides logits for two categories.
+
+    Attributes:
+        conv1 (nn.Sequential): First convolutional block with convolution, ReLU activation, and max pooling.
+        conv2 (nn.Sequential): Second convolutional block with convolution, ReLU activation, and max pooling.
+        conv3 (nn.Sequential): Third convolutional block with convolution, ReLU activation, and max pooling.
+        conv4 (nn.Sequential): Fourth convolutional block with convolution, ReLU activation, and max pooling.
+        conv5 (nn.Sequential): Fifth convolutional block with convolution, ReLU activation, and max pooling.
+        fc1 (nn.Linear): Fully connected layer that reduces dimension to 128.
+        dropout (nn.Dropout): Dropout layer to prevent overfitting by randomly setting a fraction of input units to 0.
+        fc2 (nn.Linear): Final fully connected layer that outputs the logits for the two categories.
+    """
+    
     def __init__(self):
+        """
+        Initializes the CNN network with five convolutional layers followed by max pooling and two fully connected layers.
+        The network processes input with 1 channel (e.g., grayscale images) and outputs logits for two categories.
+
+        The architecture is as follows:
+        - 5 Convolutional Layers each followed by ReLU activation and Max Pooling.
+        - A Fully Connected Layer with 128 neurons, followed by ReLU activation and dropout.
+        - A Final Fully Connected Layer that outputs the logits for two categories.
+        """
+
         super(CNNnet, self).__init__()
         # First convolutional layer
         self.conv1 = nn.Sequential(
@@ -54,6 +72,16 @@ class CNNnet(torch.nn.Module):
         self.fc2 = nn.Linear(128, 2)
 
     def forward(self, x):
+        """
+        Defines the forward pass of the CNN network.
+
+        Args:
+            x (Tensor): The input tensor containing a batch of images.
+
+        Returns:
+            x (Tensor): The output tensor containing logits for two categories.
+        """
+
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.conv3(x)
