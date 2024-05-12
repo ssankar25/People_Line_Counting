@@ -51,7 +51,7 @@ Sample Train
 
 ## People Counting Algorithm
 ### Methodology
-Using a video captured by the ToF sensor, the algorithm in line_counting.py attempts to count the number of people entering a room on the provided video. The room is seen on the top left of the video. As a result, the algorithm is defined such that when a head center crosses the bottom line and then the top, the head count increments since a person enters the room. If a head crosses the top and then the bottom line, then the head count decrements. 
+Using a video captured by the ToF sensor, the algorithm in line_counting.py attempts to count the number of people entering a room on the provided video. The room is seen on the top left of the video. As a result, the algorithm is defined such that when a head center crosses the bottom line and then the top line, then the person is counted as entering the room. If a head crosses the top line and then the bottom line, then the person is counted as leaving the room and the head count updates accordingly. 
 
 The frames of the video, in a while loop, are first processed by applying multiple denoising techniques, including Gaussian Blur, Max Pooling, and Morphological operations like erosion and dilation. Further denoising techniques, such as filtering out smaller contour areas, is done in tracking.py. This is done to increase the accuracy of the detected centroids. Then, the head count is updated in each frame using the tracking methodology previously described. The lines, centroids, and head count are then drawn to the video for better visualization.
 
