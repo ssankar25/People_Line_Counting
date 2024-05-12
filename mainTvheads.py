@@ -2,14 +2,39 @@ import cv2
 import numpy as np
 
 def connected_component_labeling(image):
-    # Perform connected component labeling using 8-connectivity rule
+    """
+    Perform connected component labeling using 8-connectivity rule
     
-    # Essentially scans the image and divides the image into components by scanning the 8 adjacent pixels
-    # and determining whether they are also foreground pixels (I think)
+    Scans the image and divides the image into components by scanning the 8 adjacent pixels
+    and determining whether they are also foreground pixels
+
+    Args:
+        image (numpy array): A binary image where the objects are expected to be in white (255) and the background in black (0).
+
+    Returns:
+        A tuple containing:
+            - num_labels (int): The number of unique labels (connected components found in the image plus one for the background).
+            - labels (numpy array): An array the same size as the input image where each element has a value that corresponds 
+              to the label of the connected component.
+            - stats (numpy.ndarray): A matrix with stats for each label, including the bounding box, area, etc.
+            - centroids (numpy.ndarray): The centroid (center of mass) for each labeled component.
+    """
+
     num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(image, 8, cv2.CV_32S)
     return num_labels, labels, stats, centroids
 
 def max_pooling_2d(image, kernel_size):
+    """
+    Apply max pooling operation to reduce the size of an image by downscaling using the maximum value in each window.
+
+    Args:
+        image (numpy array): The input image to be pooled.
+        kernel_size: The dimensions (height, width) of the pooling window.
+
+    Returns:
+        pooled_image: The pooled image (numpy array) with reduced dimensions.
+    """
+
     # Determine the size of the pooled image after pooling
     # This is done by dividing the dimensions of the original image by the specified kernel dimensions, which calculates how many kernel "windows" can fit over the image
     pooled_height = image.shape[0] // kernel_size[0]
@@ -31,6 +56,16 @@ def max_pooling_2d(image, kernel_size):
     return pooled_image
 
 def find_boundary_pixels(binary_image):
+    """
+    Identifies the boundary pixels of objects within a binary image.
+
+    Args:
+        binary_image (numpy array): A binary image where objects are 255 and the background is 0.
+
+    Returns:
+        boundary_pixels (list of tuples): List containing the coordinates (x, y) of the boundary pixels.
+    """
+    
     # Get the height and width of the image
     height, width = binary_image.shape
 
@@ -53,12 +88,16 @@ def find_boundary_pixels(binary_image):
 
 def multilevel_threshold(hist):
     """
-    Calculate the histogram and find the first segmentation threshold,
-    dividing grayscale levels from 0 to 254 into four portions.
+    Calculate the histogram and find a segmentation threshold that targets the brighter
+    portions of the image by capturing a certain percentage of the brightest pixels.
 
-    :param hist: Histogram containing grayscale levels from 0 to 254
-    :return: The first segmentation threshold
+    Args:
+        hist: Histogram containing grayscale levels from 0 to 254
+
+    Returns: 
+        The first segmentation threshold that captures a specific percentage of pixels
     """
+
     # Calculate the total number of pixels and determine the number of pixels per portion
     total_pixels = np.sum(hist[:-1])  # Exclude grayscale value 255
     pixels_per_portion = total_pixels // 4
@@ -82,6 +121,19 @@ def multilevel_threshold(hist):
         return thresholds[0]
 
 def process_image(image_path, scale_x=10, scale_y=10):
+    """
+    Processes an image by reading it, applying Gaussian blur, max pooling, and thresholding to segment the image into different components.
+
+    Args:
+        image_path (str): The path to the image file to be processed.
+        scale_x (int): The scaling factor in the x-direction for downscaling during max pooling.
+        scale_y (int): The scaling factor in the y-direction for downscaling during max pooling.
+
+    Returns:
+        transformed_centroids (list of tuples): List of centroids of detected components scaled to the original image size.
+        output_image (numpy array): The image with drawn centroids and bounding boxes to visualize the segmentation.
+    """
+
     gray_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     # Smooth with Gaussian blur to denoise for more accurate processing, which is done by averaging pixels in a 9 by 9 kernel
     blurred = cv2.GaussianBlur(gray_image, (9, 9), 0)
@@ -119,6 +171,15 @@ def process_image(image_path, scale_x=10, scale_y=10):
     return transformed_centroids, output_image
 
 def segment_image(image_index, scale_x, scale_y):
+    """
+    Process and segment an image for face detection, then crop around the centroids.
+
+    Args:
+        image_index (int): Index of the image to process.
+        scale_x (int): Scaling factor in the x-direction for resizing the images.
+        scale_y (int): Scaling factor in the y-direction for resizing the images.
+
+    """
 
     # Loads image in grayscale using image indexing from for loop
     gray_image = cv2.imread(f'TVHeads/test/{image_index}.png', cv2.IMREAD_GRAYSCALE)
